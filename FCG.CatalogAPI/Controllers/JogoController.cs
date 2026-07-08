@@ -2,7 +2,7 @@
 // JogoController.cs — CRUD de jogos + início de compra
 // ============================================================
 
-using FCG.CatalogAPI.Contratos;
+using FCG.Contratos;
 using FCG.CatalogAPI.Domain.Entidades;
 using FCG.CatalogAPI.Domain.Interfaces;
 using MassTransit;
