@@ -74,7 +74,6 @@ builder.Services.AddScoped<IBibliotecaRepositorio, BibliotecaRepositorio>();
 // MassTransit — publica e consome eventos
 builder.Services.AddMassTransit(x =>
 {
-    // Registra o consumidor do PaymentProcessedEvent
     x.AddConsumer<PaymentProcessedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
@@ -85,8 +84,12 @@ builder.Services.AddMassTransit(x =>
             h.Password(builder.Configuration["RabbitMQ:Senha"]!);
         });
 
-        // Configura a fila para receber PaymentProcessedEvent
-        cfg.ConfigureEndpoints(context);
+        // Nome explícito da fila — evita colisão com o consumer
+        // de mesmo nome em outro microsserviço (NotificationsAPI)
+        cfg.ReceiveEndpoint("catalog-payment-processed", e =>
+        {
+            e.ConfigureConsumer<PaymentProcessedConsumer>(context);
+        });
     });
 });
 
