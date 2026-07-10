@@ -25,6 +25,7 @@ public class CatalogDbContext : DbContext
         {
             entity.ToTable("Jogos");
             entity.HasKey(j => j.Id);
+            entity.Property(j => j.Id).ValueGeneratedNever();
             entity.Property(j => j.Titulo).IsRequired().HasMaxLength(200);
             entity.Property(j => j.Descricao).IsRequired().HasMaxLength(2000);
             entity.Property(j => j.Preco).IsRequired().HasPrecision(18, 2);
@@ -35,6 +36,13 @@ public class CatalogDbContext : DbContext
         {
             entity.ToTable("Promocoes");
             entity.HasKey(p => p.Id);
+
+            // Diz ao EF Core que o Id é gerado no domínio (Guid.NewGuid()),
+            // não pelo banco. Sem isso, o EF pode confundir Added com
+            // Modified ao adicionar a entidade via coleção de navegação,
+            // gerando UPDATE em vez de INSERT.
+            entity.Property(p => p.Id).ValueGeneratedNever();
+
             entity.Property(p => p.PercentualDesconto).IsRequired().HasPrecision(5, 2);
             entity.Property(p => p.Inicio).IsRequired();
             entity.Property(p => p.Fim).IsRequired();
@@ -48,6 +56,7 @@ public class CatalogDbContext : DbContext
         {
             entity.ToTable("Biblioteca");
             entity.HasKey(b => b.Id);
+            entity.Property(b => b.Id).ValueGeneratedNever(); 
             entity.HasIndex(b => new { b.UsuarioId, b.JogoId }).IsUnique();
             entity.HasIndex(b => b.OrderId).IsUnique();
             entity.Property(b => b.PrecoPago).IsRequired().HasPrecision(18, 2);
