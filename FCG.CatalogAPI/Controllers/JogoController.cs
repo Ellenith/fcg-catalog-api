@@ -101,46 +101,27 @@ public class JogoController : ControllerBase
 
     [HttpPost("{id:guid}/promocoes")]
     [Authorize(Roles = "Admin")]
-    [EndpointSummary("Criar promoção para um jogo")]
-    [EndpointDescription("Cria uma nova promoção para um jogo específico. Apenas usuários com role Admin podem acessar esta funcionalidade.")]
+    [EndpointSummary("Criar promoção")]
+    [EndpointDescription("Datas no horário de Brasília (UTC-3). Requer Admin.")]
     public async Task<IActionResult> CriarPromocao(Guid id, [FromBody] CriarPromocaoRequest request)
     {
         var jogo = await _jogoRepositorio.BuscarPorIdComPromocoesAsync(id);
-        if (jogo is null)
-            return NotFound("Jogo não encontrado.");
+        if (jogo is null) return NotFound("Jogo não encontrado.");
 
-        // Descarta o Kind vindo da desserialização e trata a data
-        // explicitamente como horário de Brasília antes de converter
-        var inicioUtc = TimeZoneInfo.ConvertTimeToUtc(
-            DateTime.SpecifyKind(request.Inicio, DateTimeKind.Unspecified), FusoBrasilia);
+        var promocao = Promocao.Criar(
+            id,
+            request.PercentualDesconto,
+            request.Inicio.ToUniversalTime(),
+            request.Fim.ToUniversalTime());
 
-        var fimUtc = TimeZoneInfo.ConvertTimeToUtc(
-            DateTime.SpecifyKind(request.Fim, DateTimeKind.Unspecified), FusoBrasilia);
-
-        // Criação + validação de sobreposição acontecem dentro do agregado
-        var promocao = jogo.AdicionarPromocao(request.PercentualDesconto, inicioUtc, fimUtc);
-
-        // jogo já está sendo rastreado (veio sem AsNoTracking) e a nova
-        // Promocao já está dentro de jogo.Promocoes. O EF Core detecta
-        // a entidade nova automaticamente ao salvar — não precisa de
-        // Add explícito no DbSet, então dá pra remover AdicionarPromocaoAsync
+        jogo.AdicionarPromocao(promocao);
+        // Removida a chamada a _jogoRepositorio.Atualizar(jogo) —
+        // o jogo já está sendo rastreado pelo EF Core (via Include),
+        // então adicionar à coleção é suficiente para o EF detectar
+        // e inserir a nova Promocao ao salvar
         await _jogoRepositorio.SalvarAsync();
 
-        return CreatedAtAction(
-            nameof(BuscarPorId),
-            new { id = jogo.Id },
-            new
-            {
-                Mensagem = "Promoção criada com sucesso!",
-                Promocao = new
-                {
-                    promocao.Id,
-                    promocao.JogoId,
-                    promocao.PercentualDesconto,
-                    Inicio = promocao.Inicio.ToLocalTime(),
-                    Fim    = promocao.Fim.ToLocalTime()
-                }
-            });
+        return Ok(new { Mensagem = "Promoção criada com sucesso!" });
     }
 
     [HttpGet("promocoes")]

@@ -14,7 +14,7 @@ public class Jogo
     public DateTime CriadoEm  { get; private set; }
 
     private readonly List<Promocao> _promocoes = new();
-    public IReadOnlyCollection<Promocao> Promocoes => _promocoes.AsReadOnly();
+    public IReadOnlyCollection<Promocao> Promocoes => _promocoes;
 
     private Jogo() { }
 
@@ -70,26 +70,12 @@ public class Jogo
             throw new DomainException("Preço não pode ser negativo.");
     }
 
-// ----------------------------------------------------------
-// Adiciona uma nova promoção ao jogo
-// Centraliza a criação dentro do agregado — nenhuma Promocao
-// pode existir "solta", desconectada das regras do Jogo
-// ----------------------------------------------------------
-public Promocao AdicionarPromocao(decimal percentualDesconto, DateTime inicio, DateTime fim)
-{
-    // Promocao.Criar já valida percentual (1-100) e fim > inicio
-    var promocao = Promocao.Criar(Id, percentualDesconto, inicio, fim);
-
-    // Duas promoções se sobrepõem quando o início de uma ocorre
-    // antes do fim da outra, nos dois sentidos. Vale para qualquer
-    // promoção já cadastrada — ativa, futura ou já expirada —
-    // já que o período não pode se repetir de qualquer forma.
-    var sobrepoe = _promocoes.Any(p => promocao.Inicio < p.Fim && p.Inicio < promocao.Fim);
-
-    if (sobrepoe)
-        throw new DomainException("Já existe uma promoção cadastrada para este período.");
-
-    _promocoes.Add(promocao);
-    return promocao;
-}
+    // ----------------------------------------------------------
+    // Adiciona uma promoção ao jogo
+    // Encapsula a regra no domínio ao invés de expor a lista
+    // ----------------------------------------------------------
+    public void AdicionarPromocao(Promocao promocao)
+    {
+        _promocoes.Add(promocao);
+    }
 }

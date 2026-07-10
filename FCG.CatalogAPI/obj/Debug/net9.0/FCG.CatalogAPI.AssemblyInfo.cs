@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FCG.CatalogAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d692f452768a940003b845fe058372a3c467cdba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23bc5f5adaa8737b4830e46f85fbe21689a099f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("FCG.CatalogAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FCG.CatalogAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
