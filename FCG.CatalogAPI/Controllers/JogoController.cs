@@ -17,6 +17,7 @@ namespace FCG.CatalogAPI.Controllers;
 public class JogoController : ControllerBase
 {
     private readonly IJogoRepositorio  _jogoRepositorio;
+    private readonly IBibliotecaRepositorio _bibliotecaRepositorio;
     private readonly IPublishEndpoint  _publishEndpoint;
 
     // Fuso de referência para as datas enviadas pelo Admin.
@@ -28,9 +29,11 @@ public class JogoController : ControllerBase
 
     public JogoController(
         IJogoRepositorio jogoRepositorio,
+        IBibliotecaRepositorio bibliotecaRepositorio,
         IPublishEndpoint publishEndpoint)
     {
         _jogoRepositorio = jogoRepositorio;
+        _bibliotecaRepositorio = bibliotecaRepositorio;
         _publishEndpoint = publishEndpoint;
     }
 
@@ -156,16 +159,27 @@ public class JogoController : ControllerBase
     [EndpointDescription("Inicia o fluxo de compra. O jogo é adicionado à biblioteca após aprovação do pagamento.")]
     public async Task<IActionResult> Comprar(Guid id)
     {
-        // Extrai o UsuarioId do token JWT
-        var sub = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier)
-               ?? User.FindFirstValue("sub");
+        var sub = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? User.FindFirstValue("sub");
         var usuarioId = Guid.Parse(sub!);
 
         var jogo = await _jogoRepositorio.BuscarPorIdComPromocoesAsync(id);
         if (jogo is null)
             return NotFound("Jogo não encontrado.");
 
-        // Publica OrderPlacedEvent para o PaymentsAPI
+        // Validação prévia — evita publicar OrderPlacedEvent e disparar
+        // todo o fluxo de pagamento para uma compra que sabemos, de
+        // antemão, que será recusada por duplicidade.
+        //
+        // IMPORTANTE: isso reduz a janela de corrida mas não a elimina
+        // por completo. Duas requisições quase simultâneas ainda podem
+        // passar por esta validação antes que a primeira seja concluída
+        // (condição de corrida clássica). Ver README para detalhes
+        // sobre essa limitação conhecida e a defesa em profundidade
+        // que existe no banco de dados (índice único).
+        if (await _bibliotecaRepositorio.JogoJaAdquiridoAsync(usuarioId, id))
+            throw new DomainException("Você já possui este jogo na sua biblioteca.");
+
         var orderId = Guid.NewGuid();
         await _publishEndpoint.Publish(new OrderPlacedEvent(
             orderId,
