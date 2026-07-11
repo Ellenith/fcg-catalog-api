@@ -148,6 +148,38 @@ docker run -p 5002:8080 \
 
 ---
 
+## Limitações conhecidas
+
+### Condição de corrida na validação de duplicidade
+
+O endpoint `POST /jogos/{id}/comprar` valida previamente se o usuário
+já possui o jogo, evitando iniciar o fluxo de pagamento para compras
+que sabidamente falhariam. Essa validação, no entanto, **não elimina
+por completo** uma condição de corrida: duas requisições de compra
+para o mesmo jogo, disparadas quase simultaneamente pelo mesmo
+usuário, podem ambas passar pela validação antes que a primeira seja
+concluída — resultando em dois `OrderPlacedEvent` publicados e,
+potencialmente, dois pagamentos aprovados para o mesmo jogo.
+
+**Defesa em profundidade:** mesmo nesse cenário extremo, a duplicidade
+**nunca chega a ser persistida** graças ao índice único composto
+`(UsuarioId, JogoId)` na tabela `Biblioteca` — o segundo `INSERT`
+falharia a nível de banco de dados. O usuário não seria cobrado
+duas vezes na biblioteca, mas o segundo pagamento aprovado não
+seria automaticamente estornado.
+
+**Solução completa (fora do escopo desta fase):** o tratamento
+correto para este tipo de cenário em um sistema de produção seria
+um padrão de **Saga com compensação** — se o `CatalogAPI` detectar
+a duplicidade após o pagamento já aprovado, ele publicaria um evento
+de estorno (`PaymentRefundRequestedEvent`) para o `PaymentsAPI`
+reverter a cobrança automaticamente. Essa solução foi
+conscientemente deixada de fora do MVP da Fase 2 por não ser
+exigida pelo Tech Challenge e por representar um esforço de
+implementação desproporcional ao benefício nesta etapa do projeto.
+
+---
+
 ## Regras de negócio
 
 - Somente Admin cadastra, atualiza e remove jogos
