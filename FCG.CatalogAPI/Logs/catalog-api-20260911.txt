@@ -1,0 +1,294 @@
+2026-09-11 21:45:19.282 -03:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2026-09-11 21:45:19.521 -03:00 [INF] User profile is available. Using 'C:\Users\Ixtli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-09-11 21:45:19.698 -03:00 [INF] Configured endpoint catalog-payment-processed, Consumer: FCG.CatalogAPI.Infraestrutura.Mensageria.PaymentProcessedConsumer
+2026-09-11 21:45:19.851 -03:00 [INF] Now listening on: http://localhost:5203
+2026-09-11 21:45:19.852 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-11 21:45:19.853 -03:00 [INF] Hosting environment: Development
+2026-09-11 21:45:19.854 -03:00 [INF] Content root path: C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI
+2026-09-11 21:45:20.008 -03:00 [INF] Bus started: "rabbitmq://localhost/"
+2026-09-11 21:54:06.267 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/usuarios - application/json 80
+2026-09-11 21:54:06.294 -03:00 [WRN] Failed to determine the https port for redirect.
+2026-09-11 21:54:06.357 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/usuarios - 404 0 null 95.9953ms
+2026-09-11 21:54:06.368 -03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5203/usuarios, Response status code: 404
+2026-09-11 21:56:08.508 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 21:56:08.516 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 21:56:08.527 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 21:56:09.728 -03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "j"."Id", "j"."CriadoEm", "j"."Descricao", "j"."Preco", "j"."Titulo", "p"."Id", "p"."Fim", "p"."Inicio", "p"."JogoId", "p"."PercentualDesconto"
+FROM "Jogos" AS "j"
+LEFT JOIN "Promocoes" AS "p" ON "j"."Id" = "p"."JogoId"
+ORDER BY "j"."Id"
+2026-09-11 21:56:09.747 -03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[FCG.CatalogAPI.Domain.Entidades.Jogo, FCG.CatalogAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[FCG.CatalogAPI.Controllers.JogoResponse, FCG.CatalogAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-09-11 21:56:09.775 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 1243.7271ms
+2026-09-11 21:56:09.776 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 21:56:09.779 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 null application/json; charset=utf-8 1271.5083ms
+2026-09-11 21:57:20.432 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - application/json 52
+2026-09-11 21:57:20.480 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 21:57:20.487 -03:00 [INF] Route matched with {action = "Avaliar", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Avaliar(System.Guid, FCG.CatalogAPI.Controllers.CriarAvaliacaoRequest) on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 21:57:20.597 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI) in 107.8027ms
+2026-09-11 21:57:20.599 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 21:57:20.600 -03:00 [ERR] Erro: An error occurred while serializing the JogoId property of class FCG.CatalogAPI.Domain.Entidades.Avaliacao: GuidSerializer cannot serialize a Guid when GuidRepresentation is Unspecified.
+MongoDB.Bson.BsonSerializationException: An error occurred while serializing the JogoId property of class FCG.CatalogAPI.Domain.Entidades.Avaliacao: GuidSerializer cannot serialize a Guid when GuidRepresentation is Unspecified.
+ ---> MongoDB.Bson.BsonSerializationException: GuidSerializer cannot serialize a Guid when GuidRepresentation is Unspecified.
+   at MongoDB.Bson.Serialization.Serializers.GuidSerializer.Serialize(BsonSerializationContext context, BsonSerializationArgs args, Guid value)
+   at MongoDB.Bson.Serialization.Serializers.SerializerBase`1.MongoDB.Bson.Serialization.IBsonSerializer.Serialize(BsonSerializationContext context, BsonSerializationArgs args, Object value)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Serialize(IBsonSerializer serializer, BsonSerializationContext context, Object value)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.SerializeNormalMember(BsonSerializationContext context, Object obj, BsonMemberMap memberMap)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.SerializeMember(BsonSerializationContext context, Object obj, BsonMemberMap memberMap)
+   --- End of inner exception stack trace ---
+   at MongoDB.Driver.Core.Operations.RetryableWriteOperationExecutor.ExecuteAsync[TResult](OperationContext operationContext, IRetryableWriteOperation`1 operation, RetryableWriteContext context)
+   at MongoDB.Driver.Core.Operations.BulkUnmixedWriteOperationBase`1.ExecuteBatchAsync(OperationContext operationContext, RetryableWriteContext context, Batch batch)
+   at MongoDB.Driver.Core.Operations.BulkUnmixedWriteOperationBase`1.ExecuteBatchesAsync(OperationContext operationContext, RetryableWriteContext context)
+   at MongoDB.Driver.Core.Operations.BulkMixedWriteOperation.ExecuteBatchAsync(OperationContext operationContext, RetryableWriteContext context, Batch batch)
+   at MongoDB.Driver.Core.Operations.BulkMixedWriteOperation.ExecuteAsync(OperationContext operationContext, IWriteBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteWriteOperationAsync[TResult](OperationContext operationContext, IClientSessionHandle session, IWriteOperation`1 operation, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteWriteOperationAsync[TResult](IClientSessionHandle session, IWriteOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.BulkWriteAsync(IClientSessionHandle session, IEnumerable`1 requests, BulkWriteOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.BulkWriteAsync(IEnumerable`1 requests, BulkWriteOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionBase`1.InsertOneAsync(TDocument document, InsertOneOptions options, Func`3 bulkWriteAsync)
+   at FCG.CatalogAPI.Infraestrutura.Persistencia.AvaliacaoRepositorio.AdicionarAsync(Avaliacao avaliacao) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Infraestrutura\Persistencia\AvaliacaoRepositorio.cs:line 19
+   at FCG.CatalogAPI.Controllers.JogoController.Avaliar(Guid id, CriarAvaliacaoRequest request) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Controllers\JogoController.cs:line 216
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at FCG.CatalogAPI.Middlewares.ErrorHandlingMiddleware.InvokeAsync(HttpContext context) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Middlewares\ErrorHandlingMiddleware.cs:line 19
+2026-09-11 21:57:20.644 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 500 null application/json 212.2482ms
+2026-09-11 21:58:04.992 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - application/json 52
+2026-09-11 21:58:04.996 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 21:58:04.997 -03:00 [INF] Route matched with {action = "Avaliar", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Avaliar(System.Guid, FCG.CatalogAPI.Controllers.CriarAvaliacaoRequest) on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 21:58:05.006 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI) in 6.4816ms
+2026-09-11 21:58:05.007 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 21:58:05.009 -03:00 [ERR] Erro: An error occurred while serializing the JogoId property of class FCG.CatalogAPI.Domain.Entidades.Avaliacao: GuidSerializer cannot serialize a Guid when GuidRepresentation is Unspecified.
+MongoDB.Bson.BsonSerializationException: An error occurred while serializing the JogoId property of class FCG.CatalogAPI.Domain.Entidades.Avaliacao: GuidSerializer cannot serialize a Guid when GuidRepresentation is Unspecified.
+ ---> MongoDB.Bson.BsonSerializationException: GuidSerializer cannot serialize a Guid when GuidRepresentation is Unspecified.
+   at MongoDB.Bson.Serialization.Serializers.GuidSerializer.Serialize(BsonSerializationContext context, BsonSerializationArgs args, Guid value)
+   at MongoDB.Bson.Serialization.Serializers.SerializerBase`1.MongoDB.Bson.Serialization.IBsonSerializer.Serialize(BsonSerializationContext context, BsonSerializationArgs args, Object value)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Serialize(IBsonSerializer serializer, BsonSerializationContext context, Object value)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.SerializeNormalMember(BsonSerializationContext context, Object obj, BsonMemberMap memberMap)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.SerializeMember(BsonSerializationContext context, Object obj, BsonMemberMap memberMap)
+   --- End of inner exception stack trace ---
+   at MongoDB.Driver.Core.Operations.RetryableWriteOperationExecutor.ExecuteAsync[TResult](OperationContext operationContext, IRetryableWriteOperation`1 operation, RetryableWriteContext context)
+   at MongoDB.Driver.Core.Operations.BulkUnmixedWriteOperationBase`1.ExecuteBatchAsync(OperationContext operationContext, RetryableWriteContext context, Batch batch)
+   at MongoDB.Driver.Core.Operations.BulkUnmixedWriteOperationBase`1.ExecuteBatchesAsync(OperationContext operationContext, RetryableWriteContext context)
+   at MongoDB.Driver.Core.Operations.BulkMixedWriteOperation.ExecuteBatchAsync(OperationContext operationContext, RetryableWriteContext context, Batch batch)
+   at MongoDB.Driver.Core.Operations.BulkMixedWriteOperation.ExecuteAsync(OperationContext operationContext, IWriteBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteWriteOperationAsync[TResult](OperationContext operationContext, IClientSessionHandle session, IWriteOperation`1 operation, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteWriteOperationAsync[TResult](IClientSessionHandle session, IWriteOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.BulkWriteAsync(IClientSessionHandle session, IEnumerable`1 requests, BulkWriteOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.BulkWriteAsync(IEnumerable`1 requests, BulkWriteOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionBase`1.InsertOneAsync(TDocument document, InsertOneOptions options, Func`3 bulkWriteAsync)
+   at FCG.CatalogAPI.Infraestrutura.Persistencia.AvaliacaoRepositorio.AdicionarAsync(Avaliacao avaliacao) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Infraestrutura\Persistencia\AvaliacaoRepositorio.cs:line 19
+   at FCG.CatalogAPI.Controllers.JogoController.Avaliar(Guid id, CriarAvaliacaoRequest request) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Controllers\JogoController.cs:line 216
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at FCG.CatalogAPI.Middlewares.ErrorHandlingMiddleware.InvokeAsync(HttpContext context) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Middlewares\ErrorHandlingMiddleware.cs:line 19
+2026-09-11 21:58:05.017 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 500 null application/json 25.7352ms
+2026-09-11 22:00:18.578 -03:00 [INF] Application is shutting down...
+2026-09-11 22:00:18.623 -03:00 [INF] Bus stopped: "rabbitmq://localhost/"
+2026-09-11 22:00:26.496 -03:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2026-09-11 22:00:26.610 -03:00 [INF] User profile is available. Using 'C:\Users\Ixtli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-09-11 22:00:26.755 -03:00 [INF] Configured endpoint catalog-payment-processed, Consumer: FCG.CatalogAPI.Infraestrutura.Mensageria.PaymentProcessedConsumer
+2026-09-11 22:00:26.876 -03:00 [INF] Now listening on: http://localhost:5203
+2026-09-11 22:00:26.877 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-11 22:00:26.878 -03:00 [INF] Hosting environment: Development
+2026-09-11 22:00:26.879 -03:00 [INF] Content root path: C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI
+2026-09-11 22:00:27.013 -03:00 [INF] Bus started: "rabbitmq://localhost/"
+2026-09-11 22:01:16.471 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - null null
+2026-09-11 22:01:16.503 -03:00 [WRN] Failed to determine the https port for redirect.
+2026-09-11 22:01:16.520 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarAvaliacoes (FCG.CatalogAPI)'
+2026-09-11 22:01:16.535 -03:00 [INF] Route matched with {action = "ListarAvaliacoes", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarAvaliacoes(System.Guid) on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:01:17.512 -03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[FCG.CatalogAPI.Domain.Entidades.Avaliacao, FCG.CatalogAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-09-11 22:01:17.534 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarAvaliacoes (FCG.CatalogAPI) in 994.2461ms
+2026-09-11 22:01:17.539 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarAvaliacoes (FCG.CatalogAPI)'
+2026-09-11 22:01:17.543 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 200 null application/json; charset=utf-8 1076.9996ms
+2026-09-11 22:01:28.736 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - application/json 40
+2026-09-11 22:01:28.789 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:01:28.794 -03:00 [INF] Route matched with {action = "Avaliar", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Avaliar(System.Guid, FCG.CatalogAPI.Controllers.CriarAvaliacaoRequest) on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:01:28.819 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI) in 22.0798ms
+2026-09-11 22:01:28.820 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:01:28.822 -03:00 [ERR] Erro: A nota deve estar entre 1 e 5.
+System.ArgumentException: A nota deve estar entre 1 e 5.
+   at FCG.CatalogAPI.Domain.Entidades.Avaliacao.Criar(Guid jogoId, Guid usuarioId, Int32 nota, String comentario) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Domain\Entidades\Avaliacao.cs:line 27
+   at FCG.CatalogAPI.Controllers.JogoController.Avaliar(Guid id, CriarAvaliacaoRequest request) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Controllers\JogoController.cs:line 215
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at FCG.CatalogAPI.Middlewares.ErrorHandlingMiddleware.InvokeAsync(HttpContext context) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Middlewares\ErrorHandlingMiddleware.cs:line 19
+2026-09-11 22:01:28.839 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 500 null application/json 103.5923ms
+2026-09-11 22:02:04.626 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - application/json 52
+2026-09-11 22:02:04.632 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:02:04.633 -03:00 [INF] Route matched with {action = "Avaliar", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Avaliar(System.Guid, FCG.CatalogAPI.Controllers.CriarAvaliacaoRequest) on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:02:04.691 -03:00 [INF] Executing CreatedResult, writing value of type '<>f__AnonymousType6`6[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-09-11 22:02:04.694 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI) in 59.2223ms
+2026-09-11 22:02:04.696 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:02:04.697 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 201 null application/json; charset=utf-8 70.6524ms
+2026-09-11 22:02:28.798 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - application/json 40
+2026-09-11 22:02:28.801 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:02:28.803 -03:00 [INF] Route matched with {action = "Avaliar", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Avaliar(System.Guid, FCG.CatalogAPI.Controllers.CriarAvaliacaoRequest) on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:02:28.805 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI) in 0.7926ms
+2026-09-11 22:02:28.807 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:02:28.808 -03:00 [ERR] Erro: A nota deve estar entre 1 e 5.
+System.ArgumentException: A nota deve estar entre 1 e 5.
+   at FCG.CatalogAPI.Domain.Entidades.Avaliacao.Criar(Guid jogoId, Guid usuarioId, Int32 nota, String comentario) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Domain\Entidades\Avaliacao.cs:line 27
+   at FCG.CatalogAPI.Controllers.JogoController.Avaliar(Guid id, CriarAvaliacaoRequest request) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Controllers\JogoController.cs:line 215
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at FCG.CatalogAPI.Middlewares.ErrorHandlingMiddleware.InvokeAsync(HttpContext context) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Middlewares\ErrorHandlingMiddleware.cs:line 19
+2026-09-11 22:02:28.813 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 500 null application/json 15.3336ms
+2026-09-11 22:02:36.257 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - application/json 42
+2026-09-11 22:02:36.261 -03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-09-11 22:02:36.264 -03:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-09-11 22:02:36.265 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 401 0 null 7.483ms
+2026-09-11 22:04:12.025 -03:00 [INF] Application is shutting down...
+2026-09-11 22:04:12.069 -03:00 [INF] Bus stopped: "rabbitmq://localhost/"
+2026-09-11 22:04:57.312 -03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2026-09-11 22:04:57.435 -03:00 [INF] User profile is available. Using 'C:\Users\Ixtli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-09-11 22:04:57.583 -03:00 [INF] Configured endpoint catalog-payment-processed, Consumer: FCG.CatalogAPI.Infraestrutura.Mensageria.PaymentProcessedConsumer
+2026-09-11 22:04:57.711 -03:00 [INF] Now listening on: http://localhost:5203
+2026-09-11 22:04:57.713 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-11 22:04:57.714 -03:00 [INF] Hosting environment: Development
+2026-09-11 22:04:57.715 -03:00 [INF] Content root path: C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI
+2026-09-11 22:04:57.857 -03:00 [INF] Bus started: "rabbitmq://localhost/"
+2026-09-11 22:05:12.713 -03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - application/json 40
+2026-09-11 22:05:12.737 -03:00 [WRN] Failed to determine the https port for redirect.
+2026-09-11 22:05:12.799 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:05:12.812 -03:00 [INF] Route matched with {action = "Avaliar", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Avaliar(System.Guid, FCG.CatalogAPI.Controllers.CriarAvaliacaoRequest) on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:05:12.940 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI) in 123.5077ms
+2026-09-11 22:05:12.945 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.Avaliar (FCG.CatalogAPI)'
+2026-09-11 22:05:12.947 -03:00 [ERR] Erro: A nota deve estar entre 1 e 5.
+FCG.CatalogAPI.Domain.Entidades.DomainException: A nota deve estar entre 1 e 5.
+   at FCG.CatalogAPI.Domain.Entidades.Avaliacao.Criar(Guid jogoId, Guid usuarioId, Int32 nota, String comentario) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Domain\Entidades\Avaliacao.cs:line 27
+   at FCG.CatalogAPI.Controllers.JogoController.Avaliar(Guid id, CriarAvaliacaoRequest request) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Controllers\JogoController.cs:line 215
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at FCG.CatalogAPI.Middlewares.ErrorHandlingMiddleware.InvokeAsync(HttpContext context) in C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI\Middlewares\ErrorHandlingMiddleware.cs:line 19
+2026-09-11 22:05:12.966 -03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5203/jogos/3731b327-476b-4ecf-8227-b15c5df332cc/avaliacoes - 400 null application/json 258.7691ms
+2026-09-11 22:05:42.169 -03:00 [INF] Application is shutting down...
+2026-09-11 22:05:42.216 -03:00 [INF] Bus stopped: "rabbitmq://localhost/"
+2026-09-11 22:24:08.383 -03:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2026-09-11 22:24:08.496 -03:00 [INF] User profile is available. Using 'C:\Users\Ixtli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-09-11 22:24:08.634 -03:00 [INF] Configured endpoint catalog-payment-processed, Consumer: FCG.CatalogAPI.Infraestrutura.Mensageria.PaymentProcessedConsumer
+2026-09-11 22:24:08.749 -03:00 [INF] Now listening on: http://localhost:5203
+2026-09-11 22:24:08.751 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-11 22:24:08.752 -03:00 [INF] Hosting environment: Development
+2026-09-11 22:24:08.753 -03:00 [INF] Content root path: C:\Users\Ixtli\OneDrive\Documentos\Cursos\Pos-Graduacao FIAP\Arquitetura e Desenvolvimento .NET\Projeto - Etapa 3\FCG - Fase 03\fcg-catalog-api\FCG.CatalogAPI
+2026-09-11 22:24:08.893 -03:00 [INF] Bus started: "rabbitmq://localhost/"
+2026-09-11 22:25:33.694 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 22:25:33.719 -03:00 [WRN] Failed to determine the https port for redirect.
+2026-09-11 22:25:33.738 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:33.749 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:25:34.898 -03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "j"."Id", "j"."CriadoEm", "j"."Descricao", "j"."Preco", "j"."Titulo", "p"."Id", "p"."Fim", "p"."Inicio", "p"."JogoId", "p"."PercentualDesconto"
+FROM "Jogos" AS "j"
+LEFT JOIN "Promocoes" AS "p" ON "j"."Id" = "p"."JogoId"
+ORDER BY "j"."Id"
+2026-09-11 22:25:34.953 -03:00 [INF] Executing ContentResult with HTTP Response ContentType of application/json
+2026-09-11 22:25:34.958 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 1205.2473ms
+2026-09-11 22:25:34.962 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:34.967 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 977 application/json 1278.2895ms
+2026-09-11 22:25:52.850 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 22:25:52.854 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:52.856 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:25:52.863 -03:00 [INF] Executing ContentResult with HTTP Response ContentType of application/json
+2026-09-11 22:25:52.864 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 6.92ms
+2026-09-11 22:25:52.866 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:52.867 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 977 application/json 17.0803ms
+2026-09-11 22:25:53.735 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 22:25:53.740 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:53.741 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:25:53.749 -03:00 [INF] Executing ContentResult with HTTP Response ContentType of application/json
+2026-09-11 22:25:53.750 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 6.841ms
+2026-09-11 22:25:53.751 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:53.752 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 977 application/json 16.959ms
+2026-09-11 22:25:54.600 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 22:25:54.603 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:54.604 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:25:54.608 -03:00 [INF] Executing ContentResult with HTTP Response ContentType of application/json
+2026-09-11 22:25:54.610 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 3.9558ms
+2026-09-11 22:25:54.611 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:25:54.612 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 977 application/json 12.504ms
+2026-09-11 22:27:26.301 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 22:27:26.304 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:27:26.305 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:27:26.347 -03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "j"."Id", "j"."CriadoEm", "j"."Descricao", "j"."Preco", "j"."Titulo", "p"."Id", "p"."Fim", "p"."Inicio", "p"."JogoId", "p"."PercentualDesconto"
+FROM "Jogos" AS "j"
+LEFT JOIN "Promocoes" AS "p" ON "j"."Id" = "p"."JogoId"
+ORDER BY "j"."Id"
+2026-09-11 22:27:26.352 -03:00 [INF] Executing ContentResult with HTTP Response ContentType of application/json
+2026-09-11 22:27:26.353 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 46.0132ms
+2026-09-11 22:27:26.354 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:27:26.355 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 977 application/json 54.4751ms
+2026-09-11 22:27:27.148 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 22:27:27.151 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:27:27.152 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:27:27.156 -03:00 [INF] Executing ContentResult with HTTP Response ContentType of application/json
+2026-09-11 22:27:27.157 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 3.4466ms
+2026-09-11 22:27:27.159 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:27:27.160 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 977 application/json 12.3171ms
+2026-09-11 22:27:27.995 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5203/jogos - null null
+2026-09-11 22:27:27.997 -03:00 [INF] Executing endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:27:27.999 -03:00 [INF] Route matched with {action = "ListarTodos", controller = "Jogo"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListarTodos() on controller FCG.CatalogAPI.Controllers.JogoController (FCG.CatalogAPI).
+2026-09-11 22:27:28.003 -03:00 [INF] Executing ContentResult with HTTP Response ContentType of application/json
+2026-09-11 22:27:28.004 -03:00 [INF] Executed action FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI) in 3.6674ms
+2026-09-11 22:27:28.005 -03:00 [INF] Executed endpoint 'FCG.CatalogAPI.Controllers.JogoController.ListarTodos (FCG.CatalogAPI)'
+2026-09-11 22:27:28.007 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5203/jogos - 200 977 application/json 12.0647ms
+2026-09-11 22:33:14.077 -03:00 [INF] Application is shutting down...
+2026-09-11 22:33:14.122 -03:00 [INF] Bus stopped: "rabbitmq://localhost/"

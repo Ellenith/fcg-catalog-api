@@ -9,6 +9,9 @@ using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+
 
 namespace FCG.CatalogAPI.Controllers;
 
@@ -18,7 +21,9 @@ public class JogoController : ControllerBase
 {
     private readonly IJogoRepositorio  _jogoRepositorio;
     private readonly IBibliotecaRepositorio _bibliotecaRepositorio;
+    private readonly IAvaliacaoRepositorio _avaliacaoRepositorio;
     private readonly IPublishEndpoint  _publishEndpoint;
+    private readonly IDistributedCache _cache;
 
     // Fuso de referência para as datas enviadas pelo Admin.
     // "America/Sao_Paulo" resolve em Windows e Linux a partir do
@@ -30,10 +35,14 @@ public class JogoController : ControllerBase
     public JogoController(
         IJogoRepositorio jogoRepositorio,
         IBibliotecaRepositorio bibliotecaRepositorio,
+        IAvaliacaoRepositorio avaliacaoRepositorio,
+        IDistributedCache cache,
         IPublishEndpoint publishEndpoint)
     {
         _jogoRepositorio = jogoRepositorio;
         _bibliotecaRepositorio = bibliotecaRepositorio;
+        _avaliacaoRepositorio = avaliacaoRepositorio;
+        _cache = cache;
         _publishEndpoint = publishEndpoint;
     }
 
@@ -57,11 +66,40 @@ public class JogoController : ControllerBase
 
     [HttpGet]
     [EndpointSummary("Listar jogos")]
-    [EndpointDescription("Retorna todos os jogos com preço atual.")]
+    [EndpointDescription("Retorna todos os jogos com preço atual. Resultado em cache (Redis) por 30s.")]
     public async Task<IActionResult> ListarTodos()
     {
+        const string chaveCache = "jogos:todos";
+
+        // Cache-aside: tenta o cache primeiro; se falhar, segue pro banco.
+        // O try garante que uma indisponibilidade do Redis degrade a
+        // performance, mas não derrube o endpoint.
+        try
+        {
+            var cacheado = await _cache.GetStringAsync(chaveCache);
+            if (cacheado is not null)
+            {
+                Response.Headers.Append("X-Cache", "HIT");
+                return Content(cacheado, "application/json");
+            }
+        }
+        catch { /* cache indisponível — segue para o banco */ }
+
         var jogos = await _jogoRepositorio.ListarTodosComPromocoesAsync();
-        return Ok(jogos.Select(j => new JogoResponse(j)));
+        var resposta = jogos.Select(j => new JogoResponse(j));
+        var json = JsonSerializer.Serialize(resposta);
+
+        try
+        {
+            await _cache.SetStringAsync(chaveCache, json, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+            });
+        }
+        catch { /* falha ao gravar no cache não deve quebrar a resposta */ }
+
+        Response.Headers.Append("X-Cache", "MISS");
+        return Content(json, "application/json");
     }
 
     [HttpGet("{id:guid}")]
@@ -198,6 +236,39 @@ public class JogoController : ControllerBase
             Preco    = jogo.GetCurrentPrice()
         });
     }
+    [HttpPost("{id:guid}/avaliacoes")]
+    [Authorize]
+    [EndpointSummary("Avaliar jogo")]
+    [EndpointDescription("Registra uma avaliação (nota de 1 a 5 e comentário) para o jogo.")]
+    public async Task<IActionResult> Avaliar(Guid id, [FromBody] CriarAvaliacaoRequest request)
+    {
+        var sub = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? User.FindFirstValue("sub");
+        var usuarioId = Guid.Parse(sub!);
+
+        var avaliacao = Avaliacao.Criar(id, usuarioId, request.Nota, request.Comentario);
+        await _avaliacaoRepositorio.AdicionarAsync(avaliacao);
+
+        return Created($"/jogos/{id}/avaliacoes", new
+        {
+            avaliacao.Id,
+            avaliacao.JogoId,
+            avaliacao.Nota,
+            avaliacao.Comentario,
+            avaliacao.CriadoEm,
+            mensagem = "Avaliação registrada com sucesso!"
+        });
+    }
+
+    [HttpGet("{id:guid}/avaliacoes")]
+    [EndpointSummary("Listar avaliações do jogo")]
+    [EndpointDescription("Retorna todas as avaliações de um jogo, das mais recentes para as mais antigas.")]
+    public async Task<IActionResult> ListarAvaliacoes(Guid id)
+    {
+        var avaliacoes = await _avaliacaoRepositorio.ListarPorJogoAsync(id);
+        return Ok(avaliacoes);
+    }
+
 }
 
 // DTOs
@@ -210,3 +281,5 @@ public record JogoResponse(Guid Id, string Titulo, string Descricao, decimal Pre
         : this(j.Id, j.Titulo, j.Descricao, j.Preco, j.GetCurrentPrice(),
                j.Promocoes.Any(p => p.EstaAtiva()), j.CriadoEm.ToLocalTime(), mensagem) { }
 }
+
+public record CriarAvaliacaoRequest(int Nota, string Comentario);

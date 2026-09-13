@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 2\\FCG - Fase 02\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj": {}
+    "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 3\\FCG - Fase 03\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 2\\FCG - Fase 02\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj": {
+    "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 3\\FCG - Fase 03\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 2\\FCG - Fase 02\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 3\\FCG - Fase 03\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj",
         "projectName": "FCG.CatalogAPI",
-        "projectPath": "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 2\\FCG - Fase 02\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj",
+        "projectPath": "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 3\\FCG - Fase 03\\fcg-catalog-api\\FCG.CatalogAPI\\FCG.CatalogAPI.csproj",
         "packagesPath": "C:\\Users\\Ixtli\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 2\\FCG - Fase 02\\fcg-catalog-api\\FCG.CatalogAPI\\obj\\",
+        "outputPath": "C:\\Users\\Ixtli\\OneDrive\\Documentos\\Cursos\\Pos-Graduacao FIAP\\Arquitetura e Desenvolvimento .NET\\Projeto - Etapa 3\\FCG - Fase 03\\fcg-catalog-api\\FCG.CatalogAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -31,6 +31,7 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -45,10 +46,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "MassTransit.RabbitMQ": {
@@ -68,6 +70,26 @@
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "Microsoft.Extensions.Caching.StackExchangeRedis": {
+              "target": "Package",
+              "version": "[10.0.12, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.11.2, )"
+            },
+            "OpenTelemetry.Exporter.Prometheus.AspNetCore": {
+              "target": "Package",
+              "version": "[1.18.0-beta.1, )"
+            },
+            "OpenTelemetry.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[1.18.0, )"
+            },
+            "OpenTelemetry.Instrumentation.AspNetCore": {
+              "target": "Package",
+              "version": "[1.18.0, )"
             },
             "Serilog.AspNetCore": {
               "target": "Package",
@@ -93,6 +115,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[9.0.20, 9.0.20]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[9.0.20, 9.0.20]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[9.0.20, 9.0.20]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[9.0.20, 9.0.20]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -101,7 +141,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -70,6 +72,12 @@ builder.Services.AddDbContext<CatalogDbContext>(options =>
 
 builder.Services.AddScoped<IJogoRepositorio, JogoRepositorio>();
 builder.Services.AddScoped<IBibliotecaRepositorio, BibliotecaRepositorio>();
+builder.Services.AddScoped<IAvaliacaoRepositorio, AvaliacaoRepositorio>();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis:ConnectionString"];
+    options.InstanceName = "fcg-catalog:";
+});
 
 // MassTransit — publica e consome eventos
 builder.Services.AddMassTransit(x =>
@@ -93,6 +101,13 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("catalog-api"))
+    .WithMetrics(metrics => metrics
+        .AddAspNetCoreInstrumentation()
+        .AddPrometheusExporter());
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -111,5 +126,6 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapPrometheusScrapingEndpoint();
 app.MapControllers();
 app.Run();
