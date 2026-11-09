@@ -1,1 +1,4 @@
 bin/\nobj/\n*.db\nLogs/
+
+bin/
+obj/
