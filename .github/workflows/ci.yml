@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  SOLUTION: FCG.CatalogAPI.sln
+  IMAGE_NAME: fcg-catalog-api
+
+jobs:
+  build-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION }}
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION }} -c Release --no-restore
+
+      - name: Testes unitários
+        run: dotnet test ${{ env.SOLUTION }} -c Release --no-build --verbosity normal
+
+  docker:
+    name: Imagem Docker
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build da imagem (tag = SHA do commit)
+        run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
