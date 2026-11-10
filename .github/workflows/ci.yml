@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -9,6 +9,11 @@ on:
 env:
   SOLUTION: FCG.CatalogAPI.sln
   IMAGE_NAME: fcg-catalog-api
+  ACR_NAME: fcgacr203f9c81
+  RESOURCE_GROUP: rg-fcg
+  AKS_NAME: aks-fcg
+  DEPLOYMENT: catalog-api
+  CONTAINER: catalog-api
 
 jobs:
   build-test:
@@ -16,26 +21,53 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-
       - name: Restore
         run: dotnet restore ${{ env.SOLUTION }}
-
       - name: Build
         run: dotnet build ${{ env.SOLUTION }} -c Release --no-restore
-
       - name: Testes unitários
         run: dotnet test ${{ env.SOLUTION }} -c Release --no-build --verbosity normal
 
-  docker:
-    name: Imagem Docker
+  push-image:
+    name: Imagem + Push (ACR)
     needs: build-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      AZ_USER: ${{ secrets.AZURE_CLIENT_ID }}
+      AZ_PASS: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZ_TENANT: ${{ secrets.AZURE_TENANT_ID }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Build da imagem (tag = SHA do commit)
-        run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
+        run: docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} .
+      - name: Login na Azure
+        run: az login --service-principal -u "$AZ_USER" -p "$AZ_PASS" --tenant "$AZ_TENANT" --output none
+      - name: Login no ACR
+        run: az acr login --name $ACR_NAME
+      - name: Push
+        run: docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+
+  deploy:
+    name: Deploy no AKS (rolling update)
+    needs: push-image
+    runs-on: ubuntu-latest
+    env:
+      AZ_USER: ${{ secrets.AZURE_CLIENT_ID }}
+      AZ_PASS: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZ_TENANT: ${{ secrets.AZURE_TENANT_ID }}
+      AZ_SUB: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    steps:
+      - name: Login na Azure
+        run: |
+          az login --service-principal -u "$AZ_USER" -p "$AZ_PASS" --tenant "$AZ_TENANT" --output none
+          az account set --subscription "$AZ_SUB"
+      - name: Credenciais do AKS
+        run: az aks get-credentials -g $RESOURCE_GROUP -n $AKS_NAME --admin --overwrite-existing
+      - name: Atualizar a imagem (rolling update)
+        run: kubectl set image deployment/$DEPLOYMENT $CONTAINER=$ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+      - name: Aguardar o rollout
+        run: kubectl rollout status deployment/$DEPLOYMENT --timeout=180s
