@@ -15,6 +15,8 @@ using Serilog;
 using System.Text;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
+using FCG.CatalogAPI.Infraestrutura.Busca;
+using System.Net.Http.Headers;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -77,6 +79,20 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration["Redis:ConnectionString"];
     options.InstanceName = "fcg-catalog:";
+});
+
+// Elasticsearch (busca avançada) — endpoint e API key vêm de variáveis de
+// ambiente (Elastic__Endpoint / Elastic__ApiKey), nunca do código.
+builder.Services.AddHttpClient<IBuscaJogoRepositorio, BuscaJogoRepositorio>(client =>
+{
+    var endpoint = builder.Configuration["Elastic:Endpoint"];
+    var apiKey   = builder.Configuration["Elastic:ApiKey"];
+    if (!string.IsNullOrWhiteSpace(endpoint) && !string.IsNullOrWhiteSpace(apiKey))
+    {
+        client.BaseAddress = new Uri(endpoint.TrimEnd('/') + "/");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ApiKey", apiKey);
+        client.Timeout = TimeSpan.FromSeconds(5);   // não prende o request se o Elastic cair
+    }
 });
 
 // MassTransit — publica e consome eventos

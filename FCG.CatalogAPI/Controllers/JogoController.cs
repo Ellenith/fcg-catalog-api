@@ -24,6 +24,7 @@ public class JogoController : ControllerBase
     private readonly IAvaliacaoRepositorio _avaliacaoRepositorio;
     private readonly IPublishEndpoint  _publishEndpoint;
     private readonly IDistributedCache _cache;
+    private readonly IBuscaJogoRepositorio _busca;
 
     // Fuso de referência para as datas enviadas pelo Admin.
     // "America/Sao_Paulo" resolve em Windows e Linux a partir do
@@ -37,13 +38,15 @@ public class JogoController : ControllerBase
         IBibliotecaRepositorio bibliotecaRepositorio,
         IAvaliacaoRepositorio avaliacaoRepositorio,
         IDistributedCache cache,
-        IPublishEndpoint publishEndpoint)
+        IPublishEndpoint publishEndpoint,
+        IBuscaJogoRepositorio busca)
     {
         _jogoRepositorio = jogoRepositorio;
         _bibliotecaRepositorio = bibliotecaRepositorio;
         _avaliacaoRepositorio = avaliacaoRepositorio;
         _cache = cache;
         _publishEndpoint = publishEndpoint;
+        _busca = busca;
     }
 
     [HttpPost]
@@ -58,6 +61,7 @@ public class JogoController : ControllerBase
         var jogo = Jogo.Criar(request.Titulo, request.Descricao, request.Preco);
         await _jogoRepositorio.AdicionarAsync(jogo);
         await _jogoRepositorio.SalvarAsync();
+        await _busca.IndexarAsync(jogo);
 
         return CreatedAtAction(nameof(BuscarPorId),
             new { id = jogo.Id },
@@ -116,12 +120,13 @@ public class JogoController : ControllerBase
     [EndpointSummary("Atualizar preço")]
     public async Task<IActionResult> AtualizarPreco(Guid id, [FromBody] AtualizarPrecoRequest request)
     {
-        var jogo = await _jogoRepositorio.BuscarPorIdAsync(id);
+        var jogo = await _jogoRepositorio.BuscarPorIdComPromocoesAsync(id);
         if (jogo is null) return NotFound("Jogo não encontrado.");
 
         jogo.AtualizarPreco(request.Preco);
         _jogoRepositorio.Atualizar(jogo);
         await _jogoRepositorio.SalvarAsync();
+        await _busca.IndexarAsync(jogo);
 
         return Ok(new JogoResponse(jogo, "Preço atualizado com sucesso!"));
     }
@@ -136,6 +141,7 @@ public class JogoController : ControllerBase
 
         _jogoRepositorio.Remover(jogo);
         await _jogoRepositorio.SalvarAsync();
+        await _busca.RemoverAsync(id);
 
         return Ok(new { Mensagem = "Jogo removido com sucesso!" });
     }
@@ -161,6 +167,7 @@ public class JogoController : ControllerBase
         // então adicionar à coleção é suficiente para o EF detectar
         // e inserir a nova Promocao ao salvar
         await _jogoRepositorio.SalvarAsync();
+        await _busca.IndexarAsync(jogo);
 
         return Ok(new { Mensagem = "Promoção criada com sucesso!" });
     }
