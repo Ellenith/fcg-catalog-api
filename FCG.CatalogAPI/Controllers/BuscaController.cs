@@ -33,7 +33,7 @@ public class BuscaController : ControllerBase
         try
         {
             var resultados = await _busca.BuscarAsync(q.Trim(), tamanho);
-            return Ok(new { Termo = q.Trim(), Total = resultados.Count, Versao = "1", Resultados = resultados });
+            return Ok(new { Termo = q.Trim(), Total = resultados.Count, Versao = "2", Resultados = resultados });
         }
         catch (Exception ex)
         {
